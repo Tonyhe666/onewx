@@ -4,7 +4,6 @@ import requests
 from bs4 import BeautifulSoup
 import itchat
 from apscheduler.schedulers.blocking import BlockingScheduler
-from datetime import datetime
 
 
 class Main:
@@ -28,7 +27,7 @@ class Main:
         if strjson["status"] == 200 :
             #print(strjson["data"]["forecast"][0])
             today = strjson["data"]["forecast"][0]
-            msg = "今天是%s\n%s\n%s\n%s/%s\n%s:%s\npm2.5:%d\n%s\n" % (today['ymd'], today['week'], today['type'], today['high'], today['low'], today['fx'], today['fl'],strjson["data"]['pm25'], today['notice'])
+            msg = "%s\n%s\n%s\n%s/%s\n%s:%s\npm2.5:%d\n%s\n" % (today['ymd'], today['week'], today['type'], today['high'], today['low'], today['fx'], today['fl'],strjson["data"]['pm25'], today['notice'])
             #print(msg)
             return msg
         pass
@@ -43,10 +42,8 @@ class Main:
         itchat.send(msg, toUserName=uuid)
 
     def scheduler(self):
-        # 定时任务
         scheduler = BlockingScheduler()
         scheduler.add_job(self.sendwx, 'cron', hour=8, minute=30)
-        # 每隔2分钟发送一条数据用于测试。
         #scheduler.add_job(self.sendwx, 'interval', seconds=120)
         scheduler.start()
 
@@ -57,4 +54,4 @@ class Main:
 
 
 if __name__ == '__main__':
-    Main().getone()
+    Main().run()
