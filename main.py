@@ -27,10 +27,9 @@ class Main:
         if strjson["status"] == 200 :
             #print(strjson["data"]["forecast"][0])
             today = strjson["data"]["forecast"][0]
-            msg = "%s\n%s\n%s\n%s/%s\n%s:%s\npm2.5:%d\n%s\n" % (today['ymd'], today['week'], today['type'], today['high'], today['low'], today['fx'], today['fl'],strjson["data"]['pm25'], today['notice'])
-            #print(msg)
+            msg = u"今天是%s\n%s\n%s\n%s/%s\n%s:%s\npm2.5:%d\n%s\n" % (today['ymd'], today['week'], today['type'], today['high'], today['low'], today['fx'], today['fl'],strjson["data"]['pm25'], today['notice'])
+           #print(msg)
             return msg
-        pass
 
     def sendwx(self):
         #print("sendwx~")
@@ -44,14 +43,14 @@ class Main:
     def scheduler(self):
         scheduler = BlockingScheduler()
         scheduler.add_job(self.sendwx, 'cron', hour=8, minute=30)
-        #scheduler.add_job(self.sendwx, 'interval', seconds=120)
+        #scheduler.add_job(self.sendwx, 'interval', seconds=10)
         scheduler.start()
 
     def run(self):
-        itchat.auto_login(hotReload=True,enableCmdQR=2)
+        itchat.auto_login(enableCmdQR=2)
         self.scheduler()
         itchat.run()
 
 
 if __name__ == '__main__':
-    Main().run()
+   Main().run()
